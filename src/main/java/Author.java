@@ -67,23 +67,13 @@ public class Author {
     }
   }
 
-  public ArrayList<Book> getBooks() {
+  public List<Book> getBooks() {
     try(Connection con = DB.sql2o.open()){
-      String sql = "SELECT book_id FROM authors_books WHERE author_id = :author_id";
-      List<Integer> book_ids = con.createQuery(sql)
-        .addParameter("author_id", this.getId())
-        .executeAndFetch(Integer.class);
-
-      ArrayList<Book> books = new ArrayList<Book>();
-
-      for (Integer book_id : book_ids) {
-          String bookQuery = "Select * From books WHERE id = :book_id";
-          Book book = con.createQuery(bookQuery)
-            .addParameter("book_id", book_id)
-            .executeAndFetchFirst(Book.class);
-            books.add(book);
-      }
-      return books;
+      String sql = "SELECT books.* FROM authors JOIN authors_books ON (authors.id=authors_books.author_id) JOIN books ON (authors_books.book_id=books.id) WHERE authors.id =:id";
+      List<Book> books = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetch(Book.class);
+        return books;
     }
   }
 
