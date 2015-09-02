@@ -28,48 +28,18 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<hr />
+<h3>$book.getTitle()</h3>
 
-<div class="well">
-  <h2>$book.getTitle()</h2>
-  <h4>#foreach($author in $book.getAuthors())
-      by $author.getName() <br>
-      #end </h4>
-  <h6>All book copies: $book.getCopies()</h6>
-  <h6>Available copies: $book.countAvailable()</h6>
-</div>
-
-
-<!--Add Author Form-->
+<!--Add Book to Author Form-->
 <div class="col-md-6">
-  <form action="/books/addAuthors" method="post">
-    <fieldset>
-      <legend>Add Author</legend>
+<form action="/books/$book.getId()/update" method="post">
+  <fieldset>
+    <legend>Update Book Title</legend>
       <div class="form-group">
-        <label for="author_id">Author:</label>
-        <select name="author_id">
-          #foreach ($author in $authors)
-          <option value="$author.getId()">$author.getName()
-          #end
-        </select>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="$book.getTitle()">
       </div>
-      <input type="hidden" value="$book.getId()" name="book_id">
-      <button type="submit" class="btn btn-info" id="add_author">Add Author</button>
-    </fieldset>
-  </form>
-</div>
-
-  <!--Add Copies Form-->
-  <div class="col-md-6">
-    <form action="/books/addCopies" method="post">
-      <fieldset>
-        <legend>Add Copies</legend>
-        <div class="form-group">
-          <label for="copies">How many copies?</label>
-          <input id="copies" name="copies" type="text">
-        </div>
-        <input type="hidden" value="$book.getId()" name="book_id">
-        <button type="submit" class="btn btn-info" id="add_author">Add Copies</button>
-      </fieldset>
-    </form>
-  </div>
+      <button type="submit" class="btn btn-info" id="update_book">Update</button>
+  </fieldset>
+</form>
+<hr />

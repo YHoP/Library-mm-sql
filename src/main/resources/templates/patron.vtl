@@ -14,9 +14,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/authors">Authors</a></li>
+        <li><a href="/authors">Authors</a></li>
         <li><a href="/books">Books</a></li>
-        <li><a href="/patrons">Patrons</a></li>
+        <li class="active"><a href="/patrons">Patrons</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -28,28 +28,6 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<h3>$author.getName()</h3>
-
-<!--Add Book to Author Form-->
-<div class="col-md-6">
-<form action="/authors/addBook" method="post">
-  <fieldset>
-    <legend>Add Book</legend>
-    <div class="form-group">
-      <label for="bookId">Book:</label>
-      <select name="bookId">
-        #foreach ($book in $allBooks)
-        <option value="$book.getId()">$book.getTitle()
-        #end
-      </select>
-    </div>
-      <input type="hidden" value="$author.getId()" name="autorId">
-      <button type="submit" class="btn btn-info" id="add_book">Add Book</button>
-  </fieldset>
-</form>
-<hr />
-<!-- books -->
-#foreach ($book in $books)
-<a href="/books/$book.getId()">$book.getTitle()</a><br>
-#end
+<div class="well">
+  <h2>$patron.getName()</h2>
 </div>

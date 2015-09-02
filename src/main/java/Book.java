@@ -38,6 +38,7 @@ public class Book {
     }
   }
 
+
   public void save() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO books (title) VALUES (:title)";
@@ -97,5 +98,58 @@ public class Book {
       return authors;
     }
   }
+
+  // need to fix init error
+  public ArrayList<Author> getUnassignedAuthors() {
+    try(Connection con = DB.sql2o.open()){
+      String sql = "SELECT author_id FROM authors_books WHERE NOT book_id = :book_id";
+      List<Integer> author_ids = con.createQuery(sql)
+        .addParameter("book_id", this.getId())
+        .executeAndFetch(Integer.class);
+
+      ArrayList<Author> authors = new ArrayList<Author>();
+
+      for (Integer author_id : author_ids) {
+          String bookQuery = "Select * From authors WHERE id = :author_id";
+          Author author = con.createQuery(bookQuery)
+            .addParameter("author_id", author_id)
+            .executeAndFetchFirst(Author.class);
+            authors.add(author);
+      }
+      return authors;
+    }
+  }
+
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "DELETE FROM books where id=:id";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .executeUpdate();
+      String joinsql = "DELETE FROM authors_books where book_id=:id";
+      con.createQuery(joinsql)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
+  public Integer getCopies() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM copies where book_id=:id";
+      List<Copy> bookCopies = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetch(Copy.class);
+      return bookCopies.size();
+    }
+  }
+
+  public int countAvailable() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT count(*) FROM copies where book_id =:id AND available = true";
+      return (int) con.createQuery(sql)
+                .addParameter("id", id)
+                .executeAndFetchFirst(Integer.class);
+    }
+ }
 
 }

@@ -87,4 +87,38 @@ public class Author {
     }
   }
 
+  // need to fix init error
+  public ArrayList<Book> getUnassignedBooks() {
+    try(Connection con = DB.sql2o.open()){
+      String sql = "SELECT book_id FROM authors_books WHERE NOT author_id = :author_id";
+      List<Integer> book_ids = con.createQuery(sql)
+        .addParameter("author_id", this.getId())
+        .executeAndFetch(Integer.class);
+
+      ArrayList<Book> books = new ArrayList<Book>();
+
+      for (Integer book_id : book_ids) {
+          String bookQuery = "Select * From books WHERE id = :book_id";
+          Book book = con.createQuery(bookQuery)
+            .addParameter("book_id", book_id)
+            .executeAndFetchFirst(Book.class);
+            books.add(book);
+      }
+      return books;
+    }
+  }
+
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "DELETE FROM authors where id=:id";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .executeUpdate();
+      String joinsql = "DELETE FROM authors_books where author_id=:id";
+      con.createQuery(joinsql)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
 }

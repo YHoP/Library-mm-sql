@@ -16,6 +16,7 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="/authors">Authors</a></li>
         <li><a href="/books">Books</a></li>
+        <li><a href="/patrons">Patrons</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -39,9 +40,27 @@
         <button type="submit" class="btn btn-info" id="add_author">Add Author</button>
     </fieldset>
   </form>
-  <hr />
-  <!-- Authors -->
-  #foreach ($author in $authors)
-  <a href="/authors/$author.getId()">$author.getName()</a>
-  #end
 </div>
+  <hr />
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Author Name</th>
+      <th>-</th>
+      <th>-</th>
+      <th>-</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach ($author in $authors)
+      <tr>
+        <td><a href="/authors/$author.getId()">$author.getName()</a></td>
+        <td><a href="/authors/$author.getId()" class="btn btn-info">Info</a></td>
+        <td><a href="/authors/$author.getId()/update" class="btn btn-warning">Update</a></td>
+        <td><a href="/authors/$author.getId()/delete" class="btn btn-danger">Delete</a></td>
+      </tr>
+    #end
+  </tbody>
+</table>

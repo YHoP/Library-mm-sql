@@ -279,9 +279,8 @@ ALTER TABLE ONLY patrons ALTER COLUMN id SET DEFAULT nextval('patrons_id_seq'::r
 --
 
 COPY authors (id, name) FROM stdin;
-1	Tom Robbins
-2	Harper Lee
-3	J. K. Rowling
+6	Neil Gaiman
+11	Alan Lightman
 \.
 
 
@@ -290,12 +289,11 @@ COPY authors (id, name) FROM stdin;
 --
 
 COPY authors_books (id, author_id, book_id) FROM stdin;
-1	1	2
-2	1	2
-3	1	1
-4	2	3
-5	2	3
-6	3	4
+15	6	11
+16	6	12
+17	11	13
+20	6	14
+21	6	15
 \.
 
 
@@ -303,14 +301,14 @@ COPY authors_books (id, author_id, book_id) FROM stdin;
 -- Name: authors_books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('authors_books_id_seq', 6, true);
+SELECT pg_catalog.setval('authors_books_id_seq', 21, true);
 
 
 --
 -- Name: authors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('authors_id_seq', 3, true);
+SELECT pg_catalog.setval('authors_id_seq', 11, true);
 
 
 --
@@ -318,10 +316,11 @@ SELECT pg_catalog.setval('authors_id_seq', 3, true);
 --
 
 COPY books (id, title) FROM stdin;
-1	Still Life With Woodpecker
-2	Even Cowgirls Get The Blues
-3	To Kill A Mockingbird
-4	Harry Potter
+11	Fragile Things
+13	Einstein's Dreams
+12	Sandman
+14	The Ocean At The End Of The Lane
+15	Neverwhere
 \.
 
 
@@ -329,7 +328,7 @@ COPY books (id, title) FROM stdin;
 -- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('books_id_seq', 4, true);
+SELECT pg_catalog.setval('books_id_seq', 15, true);
 
 
 --
@@ -352,6 +351,12 @@ SELECT pg_catalog.setval('checkouts_id_seq', 1, false);
 --
 
 COPY copies (id, book_id, available) FROM stdin;
+1	12	t
+2	12	t
+3	12	t
+4	12	t
+5	15	t
+6	15	t
 \.
 
 
@@ -359,7 +364,7 @@ COPY copies (id, book_id, available) FROM stdin;
 -- Name: copies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('copies_id_seq', 1, false);
+SELECT pg_catalog.setval('copies_id_seq', 6, true);
 
 
 --
@@ -367,6 +372,8 @@ SELECT pg_catalog.setval('copies_id_seq', 1, false);
 --
 
 COPY patrons (id, name) FROM stdin;
+1	Juliana
+2	Yvonne
 \.
 
 
@@ -374,7 +381,7 @@ COPY patrons (id, name) FROM stdin;
 -- Name: patrons_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('patrons_id_seq', 1, false);
+SELECT pg_catalog.setval('patrons_id_seq', 2, true);
 
 
 --

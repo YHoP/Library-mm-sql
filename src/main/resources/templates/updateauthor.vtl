@@ -32,24 +32,14 @@
 
 <!--Add Book to Author Form-->
 <div class="col-md-6">
-<form action="/authors/addBook" method="post">
+<form action="/authors/$author.getId()/update" method="post">
   <fieldset>
-    <legend>Add Book</legend>
-    <div class="form-group">
-      <label for="bookId">Book:</label>
-      <select name="bookId">
-        #foreach ($book in $allBooks)
-        <option value="$book.getId()">$book.getTitle()
-        #end
-      </select>
-    </div>
-      <input type="hidden" value="$author.getId()" name="autorId">
-      <button type="submit" class="btn btn-info" id="add_book">Add Book</button>
+    <legend>Update Author</legend>
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="$author.getName()">
+      </div>
+      <button type="submit" class="btn btn-info" id="update_name">Update</button>
   </fieldset>
 </form>
 <hr />
-<!-- books -->
-#foreach ($book in $books)
-<a href="/books/$book.getId()">$book.getTitle()</a><br>
-#end
-</div>

@@ -15,7 +15,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a href="/authors">Authors</a></li>
-        <li><a href="/books">Books</a></li>
+        <li class="active"><a href="/books">Books</a></li>
         <li><a href="/patrons">Patrons</a></li>
       </ul>
       <form class="navbar-form navbar-left" role="search">
@@ -27,26 +27,6 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
-
-<!--Add Author Form-->
-<div class="col-md-6">
-  <form action="/authors/new" method="post">
-    <fieldset>
-      <legend>Add Author</legend>
-        <div class="form-group">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name">
-        </div>
-        <button type="submit" class="btn btn-info" id="add_author">Add Author</button>
-    </fieldset>
-  </form>
-  <hr />
-  <!-- Authors -->
-  #foreach ($author in $authors)
-  <a href="/authors/$author.getId()">$author.getName()</a><br>
-  #end
-</div>
 
 <!--Add Book Form-->
 <div class="col-md-6">
@@ -68,13 +48,7 @@
         <button type="submit" class="btn btn-info" id="add_book">Add Book</button>
     </fieldset>
   </form>
-  <hr />
-  <!-- Books -->
-  #foreach ($book in $books)
-  <a href="/books/$book.getId()">$book.getTitle()</a><br>
-  #end
 </div>
-
 <hr />
 
 <table class="table table-striped">
@@ -82,6 +56,9 @@
     <tr>
       <th>Author Name</th>
       <th>Book Title</th>
+      <th>-</th>
+      <th>-</th>
+      <th>-</th>
     </tr>
   </thead>
   <tbody>
@@ -92,7 +69,11 @@
             $author.getName() <br>
           #end
           </td>
-        <td>$book.getTitle()</td>
+        <td><a href="/books/$book.getId()">$book.getTitle()</a></td>
+        <td><a href="/books/$book.getId()" class="btn btn-info">Info</a></td>
+        <td><a href="/books/$book.getId()/update" class="btn btn-warning">Update</a></td>
+        <td><a href="/books/$book.getId()/delete" class="btn btn-danger">Delete</a></td>
+      </tr>
       </tr>
     #end
   </tbody>
