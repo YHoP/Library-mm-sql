@@ -60,7 +60,7 @@ public class App {
       int author_id = Integer.parseInt(request.params("id"));
       Author author = Author.find(author_id);
       model.put("author", author);
-      model.put("allBooks", author.getUnassignedBooks());
+      model.put("allBooks", Book.all());
       model.put("books", author.getBooks());
       model.put("template", "templates/author.vtl");
       return new ModelAndView(model, layout);

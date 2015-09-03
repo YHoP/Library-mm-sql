@@ -44,7 +44,7 @@
     <div class="form-group">
       <label for="bookId">Book:</label>
       <select name="bookId">
-        #foreach ($book in $books)
+        #foreach ($book in $allBooks)
         <option value="$book.getId()">$book.getTitle()
         #end
       </select>
