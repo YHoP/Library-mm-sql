@@ -69,6 +69,16 @@ public class Book {
     }
   }
 
+  public static List<Book> searchByTitle(String title_search) {
+    String sql = "SELECT * FROM books WHERE title LIKE '%" + title_search + "%'";
+    List<Book> searchResults;
+    try (Connection con = DB.sql2o.open()) {
+      searchResults = con.createQuery(sql)
+        .executeAndFetch(Book.class);
+    }
+    return searchResults;
+  }
+
   public void addAuthor(int author_id) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO authors_books (author_id, book_id) VALUES (:author_id, :book_id)";

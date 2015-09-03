@@ -18,11 +18,17 @@
         <li><a href="/books">Books</a></li>
         <li class="active"><a href="/patrons">Patrons</a></li>
       </ul>
-      <form class="navbar-form navbar-left" role="search">
+      <form class="navbar-form navbar-left" role="search" action="/author_search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+          <input id="author_search" name="author_search" type="text" class="form-control" placeholder="Author Name">
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-default">Search by Author</button>
+      </form>
+      <form class="navbar-form navbar-left" role="search" action="/title_search">
+        <div class="form-group">
+          <input id="title_search" name="title_search" type="text" class="form-control" placeholder="Book Title">
+        </div>
+        <button type="submit" class="btn btn-default">Search by Title</button>
       </form>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -57,7 +63,7 @@
         </td>
         <td>$checkout.getCheckoutDate()</td>
         <td>$checkout.getDueDate()</td>
-        <td><a href="/" class="btn btn-success">Returned</a></td>
+        <td><a href="/patrons/$patron.getId()/return/$checkout.getId()" class="btn btn-success">Return</a></td>
       </tr>
     #end
   </tbody>
@@ -75,15 +81,21 @@
       <th>Title</th>
       <th>Author</th>
       <th>Checkout</th>
-      <th>Due Date</th>
+      <th>Return Date</th>
     </tr>
   </thead>
   <tbody>
+    #foreach($checkout in $patron.getHistory())
       <tr>
-        <td>American Gods</td>
-        <td>Neil Gaiman</td>
-        <td>2014/05/07</td>
-        <td>2050/05/08</td>
+        <td>$checkout.getBookTitle()</td>
+        <td>
+          #foreach ($author in $checkout.getBookAuthors())
+          <option value="$author.getId()">$author.getName()
+          #end
+        </td>
+        <td>$checkout.getCheckoutDate()</td>
+        <td>$checkout.getDueDate()</td>
       </tr>
+    #end
   </tbody>
 </table>

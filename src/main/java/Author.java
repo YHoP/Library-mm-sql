@@ -77,6 +77,16 @@ public class Author {
     }
   }
 
+  public static List<Author> searchByAuthor(String author_name) {
+    String sql = "SELECT * FROM authors WHERE name LIKE '%" + author_name + "%'";
+    List<Author> searchResults;
+    try (Connection con = DB.sql2o.open()) {
+      searchResults = con.createQuery(sql)
+        .executeAndFetch(Author.class);
+    }
+    return searchResults;
+  }
+
   // need to fix init error
   public List<Book> getUnassignedBooks() {
     try(Connection con = DB.sql2o.open()){

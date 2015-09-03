@@ -67,7 +67,17 @@ public class Patron {
 
   public List<Checkout> getCheckouts(){
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM checkouts where patron_id=:id";
+      String sql = "SELECT checkouts.* FROM patrons JOIN checkouts ON (patrons.id = checkouts.patron_id) JOIN copies ON (checkouts.copy_id = copies.id) WHERE checkouts.patron_id =:id AND copies.available = false";
+      List<Checkout> checkouts = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetch(Checkout.class);
+      return checkouts;
+    }
+  }
+
+  public List<Checkout> getHistory(){
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT checkouts.* FROM patrons JOIN checkouts ON (patrons.id = checkouts.patron_id) JOIN copies ON (checkouts.copy_id = copies.id) WHERE checkouts.patron_id =:id AND copies.available = true";
       List<Checkout> checkouts = con.createQuery(sql)
         .addParameter("id", id)
         .executeAndFetch(Checkout.class);

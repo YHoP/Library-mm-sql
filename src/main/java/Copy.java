@@ -89,6 +89,59 @@ public class Copy {
     }
   }
 
+  public static List<Copy> getCheckoutCopies(){
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT copies.* FROM checkouts JOIN copies ON (copies.id = checkouts.copy_id) WHERE copies.available = false";
+      List<Copy> checkouts = con.createQuery(sql)
+        .executeAndFetch(Copy.class);
+      return checkouts;
+    }
+  }
+
+  public String getBookTitle(){
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT books.title FROM copies JOIN books ON (copies.book_id = books.id) WHERE copies.id = :id";
+      String bookTitle = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetchFirst(String.class);
+      return bookTitle;
+    }
+  }
+
+  public List<Author> getBookAuthors(){
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT books.id FROM copies JOIN books ON (copies.book_id = books.id) WHERE copies.id = :id";
+      int book_id =  (int) con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetchFirst(Integer.class);
+
+      String joinsql = "SELECT authors.* FROM books JOIN authors_books ON (books.id = authors_books.book_id) JOIN authors ON (authors_books.author_id = authors.id) WHERE books.id =:book_id";
+      List<Author> authors = con.createQuery(joinsql)
+        .addParameter("book_id", book_id)
+        .executeAndFetch(Author.class);
+      return authors;
+    }
+
+  }
+
+  public String getPatronName(){
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT patrons.name FROM copies JOIN checkouts ON (copies.id = checkouts.copy_id) JOIN patrons ON (checkouts.patron_id = patrons.id) WHERE copies.id = :id";
+      String patron = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetchFirst(String.class);
+      return patron;
+    }
+  }
+
+  public static String getDueDate(int id) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT due_date FROM checkouts WHERE copy_id =:id";
+      return con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetchFirst(String.class);
+    }
+  }
 
   public void delete() {
     try(Connection con = DB.sql2o.open()) {
@@ -98,4 +151,5 @@ public class Copy {
         .executeUpdate();
     }
   }
+
 }

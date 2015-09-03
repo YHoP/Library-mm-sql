@@ -13,9 +13,28 @@ public class App {
 
     get("/", (request, response) -> {
       HashMap<String, Object> model = new HashMap<String, Object>();
-      model.put("books", Book.all());
-      model.put("authors", Author.all());
+      model.put("copies", Copy.getCheckoutCopies());
       model.put("template", "templates/index.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/author_search", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      String author_search = request.queryParams("author_search");
+
+      model.put("authors", Author.searchByAuthor(author_search));
+
+      model.put("template", "templates/authors.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/title_search", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      String title_search = request.queryParams("title_search");
+
+      model.put("books", Book.searchByTitle(title_search));
+      model.put("authors", Author.all());
+      model.put("template", "templates/books.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
@@ -254,5 +273,21 @@ public class App {
       return null;
     });
 
+    get("/patrons/:patron_id/return/:checkout_id", (request,response) ->{
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      int patron_id = Integer.parseInt(request.params("patron_id"));
+      int checkout_id = Integer.parseInt(request.params("checkout_id"));
+      Checkout checkout = Checkout.find(checkout_id);
+      checkout.setAvailable();
+      response.redirect("/patrons/" + patron_id);
+      return null;
+    });
+
+  // public static void redirectIfCheckedOut(Copy copy, Response response) {
+  //   if (copy.isCheckedOut()) {
+  //     response.redirect("/patrons/" + patron_id);
+  //     return null;
+  //   }
+  // }
   }
 }

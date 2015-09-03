@@ -39,6 +39,7 @@ public class Checkout {
     }
   }
 
+
   public void save() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "INSERT INTO checkouts (copy_id, patron_id, checkout_date, due_date) VALUES (:copy_id, :patron_id, :checkout_date, :due_date)";
@@ -86,6 +87,16 @@ public class Checkout {
       return authors;
     }
 
+  }
+
+
+  public void setAvailable() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE copies SET available = true WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("id", this.getCopyId())
+        .executeUpdate();
+    }
   }
 
 
