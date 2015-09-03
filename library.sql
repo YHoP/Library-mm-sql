@@ -281,6 +281,8 @@ ALTER TABLE ONLY patrons ALTER COLUMN id SET DEFAULT nextval('patrons_id_seq'::r
 COPY authors (id, name) FROM stdin;
 6	Neil Gaiman
 11	Alan Lightman
+12	Terry Pratchett
+13	Tom Robbins
 \.
 
 
@@ -294,6 +296,9 @@ COPY authors_books (id, author_id, book_id) FROM stdin;
 17	11	13
 20	6	14
 21	6	15
+22	12	16
+23	6	16
+24	13	17
 \.
 
 
@@ -301,14 +306,14 @@ COPY authors_books (id, author_id, book_id) FROM stdin;
 -- Name: authors_books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('authors_books_id_seq', 21, true);
+SELECT pg_catalog.setval('authors_books_id_seq', 24, true);
 
 
 --
 -- Name: authors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('authors_id_seq', 11, true);
+SELECT pg_catalog.setval('authors_id_seq', 13, true);
 
 
 --
@@ -321,6 +326,8 @@ COPY books (id, title) FROM stdin;
 12	Sandman
 14	The Ocean At The End Of The Lane
 15	Neverwhere
+16	Good Omens
+17	Still Life With Woodpecker
 \.
 
 
@@ -328,7 +335,7 @@ COPY books (id, title) FROM stdin;
 -- Name: books_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('books_id_seq', 15, true);
+SELECT pg_catalog.setval('books_id_seq', 17, true);
 
 
 --
@@ -336,6 +343,12 @@ SELECT pg_catalog.setval('books_id_seq', 15, true);
 --
 
 COPY checkouts (id, copy_id, patron_id, due_date, checkout_date) FROM stdin;
+10	25	2	2015-09-17	2015-09-08
+11	29	1	2015-09-24	2015-09-08
+12	56	1	2015-10-22	2015-09-18
+13	33	1	2016-02-22	2015-11-02
+14	37	1	2015-09-14	2015-10-22
+15	78	3	2015-09-02	2015-09-04
 \.
 
 
@@ -343,7 +356,7 @@ COPY checkouts (id, copy_id, patron_id, due_date, checkout_date) FROM stdin;
 -- Name: checkouts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('checkouts_id_seq', 1, false);
+SELECT pg_catalog.setval('checkouts_id_seq', 15, true);
 
 
 --
@@ -351,12 +364,61 @@ SELECT pg_catalog.setval('checkouts_id_seq', 1, false);
 --
 
 COPY copies (id, book_id, available) FROM stdin;
-1	12	t
-2	12	t
-3	12	t
-4	12	t
-5	15	t
-6	15	t
+24	13	t
+26	13	t
+27	16	t
+28	15	t
+30	15	t
+31	15	t
+32	11	t
+34	11	t
+35	11	t
+36	11	t
+38	11	t
+39	11	t
+40	11	t
+41	11	t
+42	11	t
+43	11	t
+25	13	f
+29	15	t
+44	12	t
+45	12	t
+46	12	t
+47	12	t
+48	12	t
+49	12	t
+50	12	t
+51	12	t
+52	12	t
+53	12	t
+54	12	t
+55	12	t
+57	12	t
+58	12	t
+59	12	t
+60	12	t
+61	12	t
+62	12	t
+63	12	t
+64	12	t
+65	12	t
+66	12	t
+67	12	t
+68	12	t
+69	12	t
+70	12	t
+71	12	t
+72	12	t
+73	12	t
+74	12	t
+75	12	t
+76	12	t
+77	12	t
+56	12	t
+33	11	f
+37	11	f
+78	17	t
 \.
 
 
@@ -364,7 +426,7 @@ COPY copies (id, book_id, available) FROM stdin;
 -- Name: copies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('copies_id_seq', 6, true);
+SELECT pg_catalog.setval('copies_id_seq', 78, true);
 
 
 --
@@ -374,6 +436,7 @@ SELECT pg_catalog.setval('copies_id_seq', 6, true);
 COPY patrons (id, name) FROM stdin;
 1	Juliana
 2	Yvonne
+3	Momo
 \.
 
 
@@ -381,7 +444,7 @@ COPY patrons (id, name) FROM stdin;
 -- Name: patrons_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('patrons_id_seq', 2, true);
+SELECT pg_catalog.setval('patrons_id_seq', 3, true);
 
 
 --
