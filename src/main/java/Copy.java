@@ -60,6 +60,35 @@ public class Copy {
     }
   }
 
+  public static List<Copy> getCopyList(int book_id) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM copies where book_id=:book_id ORDER BY id";
+      List<Copy> bookCopies = con.createQuery(sql)
+        .addParameter("book_id", book_id)
+        .executeAndFetch(Copy.class);
+      return bookCopies;
+    }
+  }
+
+  public static Integer getPatronId(int id) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT patron_id FROM checkouts WHERE copy_id =:id ORDER BY id DESC";
+      return (int) con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetchFirst(Integer.class);
+    }
+  }
+
+
+  public void setUnavailable() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE copies SET available = false WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
 
   public void delete() {
     try(Connection con = DB.sql2o.open()) {

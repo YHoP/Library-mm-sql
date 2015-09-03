@@ -74,48 +74,28 @@ public class Book {
       String sql = "INSERT INTO authors_books (author_id, book_id) VALUES (:author_id, :book_id)";
       con.createQuery(sql)
         .addParameter("author_id", author_id)
-        .addParameter("book_id", this.getId())
+        .addParameter("book_id", id)
         .executeUpdate();
     }
   }
 
-  public ArrayList<Author> getAuthors() {
+  public List<Author> getAuthors() {
     try(Connection con = DB.sql2o.open()){
-      String sql = "SELECT author_id FROM authors_books WHERE book_id = :book_id";
-      List<Integer> author_ids = con.createQuery(sql)
-        .addParameter("book_id", this.getId())
-        .executeAndFetch(Integer.class);
-
-      ArrayList<Author> authors = new ArrayList<Author>();
-
-      for (Integer author_id : author_ids) {
-          String bookQuery = "Select * From authors WHERE id = :author_id";
-          Author author = con.createQuery(bookQuery)
-            .addParameter("author_id", author_id)
-            .executeAndFetchFirst(Author.class);
-            authors.add(author);
-      }
+      String sql = "SELECT authors.* FROM books JOIN authors_books ON (books.id = authors_books.book_id) JOIN authors ON (authors_books.author_id = authors.id) WHERE books.id =:id";
+      List<Author> authors = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetch(Author.class);
       return authors;
     }
   }
 
   // need to fix init error
-  public ArrayList<Author> getUnassignedAuthors() {
+  public List<Author> getUnassignedAuthors() {
     try(Connection con = DB.sql2o.open()){
-      String sql = "SELECT author_id FROM authors_books WHERE NOT book_id = :book_id";
-      List<Integer> author_ids = con.createQuery(sql)
-        .addParameter("book_id", this.getId())
-        .executeAndFetch(Integer.class);
-
-      ArrayList<Author> authors = new ArrayList<Author>();
-
-      for (Integer author_id : author_ids) {
-          String bookQuery = "Select * From authors WHERE id = :author_id";
-          Author author = con.createQuery(bookQuery)
-            .addParameter("author_id", author_id)
-            .executeAndFetchFirst(Author.class);
-            authors.add(author);
-      }
+      String sql = "SELECT authors.* FROM books JOIN authors_books ON (books.id = authors_books.book_id) JOIN authors ON (authors_books.author_id = authors.id) WHERE NOT books.id =:id";
+      List<Author> authors = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetch(Author.class);
       return authors;
     }
   }

@@ -73,3 +73,30 @@
       </fieldset>
     </form>
   </div>
+
+<br><br><br>
+<hr/>
+<br><br><br>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>COPY ID</th>
+      <th>Availablity</th>
+      <th>-</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach($copy in $copies)
+      <tr>
+        <td>$copy.getId()</td>
+        <td>$copy.getAvailable()</td>
+        #if($copy.getAvailable())
+        <td><a href="/copy/$copy.getId()/checkout" class="btn btn-success">Checkout</a></td>
+        #else
+        <td><a href="/patrons/$copy.getPatronId($copy.getId())" class="btn btn-danger">Due Date</a></td>
+        #end
+      </tr>
+    #end
+  </tbody>
+</table>

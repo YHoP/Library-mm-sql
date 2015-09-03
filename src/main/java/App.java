@@ -53,7 +53,7 @@ public class App {
       int book_id = Integer.parseInt(request.queryParams("bookId"));
       Author author = Author.find(author_id);
       author.addBook(book_id);
-      model.put("allBooks", Book.all());
+      model.put("books", Book.all());
       response.redirect("/authors/" + author_id);
       return null;
     });
@@ -110,6 +110,7 @@ public class App {
       HashMap<String, Object> model = new HashMap<String, Object>();
       int book_id = Integer.parseInt(request.params("id"));
       Book book = Book.find(book_id);
+      model.put("copies", Copy.getCopyList(book_id));
       model.put("book", book);
       model.put("authors", Author.all());
       model.put("template", "templates/book.vtl");
@@ -216,6 +217,39 @@ public class App {
       Patron patron = Patron.find(patron_id);
       String name = request.queryParams("name");
       patron.update(name);
+      response.redirect("/patrons/" + patron_id);
+      return null;
+    });
+
+    get("/copy/:id/checkout", (request,response) ->{
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      int copy_id = Integer.parseInt(request.params("id"));
+      Copy copy = Copy.find(copy_id);
+      int book_id = copy.getBookId();
+      Book book = Book.find(book_id);
+      model.put("patrons", Patron.all());
+      model.put("copy", copy);
+      model.put("book", book);
+      model.put("template", "templates/checkout.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/copy/:id/checkout", (request,response) ->{
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      int copy_id = Integer.parseInt(request.queryParams("copy_id"));
+      int patron_id = Integer.parseInt(request.queryParams("patron_id"));
+      String checkout_date = request.queryParams("checkout_date");
+      String due_date = request.queryParams("due_date");
+      Checkout checkout = new Checkout (copy_id, patron_id, checkout_date, due_date);
+      checkout.save();
+
+      Copy copy = Copy.find(copy_id);
+      copy.setUnavailable();
+      int book_id = copy.getBookId();
+      Book book = Book.find(book_id);
+      model.put("patrons", Patron.all());
+      model.put("copy", copy);
+      model.put("book", book);
       response.redirect("/patrons/" + patron_id);
       return null;
     });

@@ -65,4 +65,14 @@ public class Patron {
     }
   }
 
+  public List<Checkout> getCheckouts(){
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM checkouts where patron_id=:id";
+      List<Checkout> checkouts = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetch(Checkout.class);
+      return checkouts;
+    }
+  }
+
 }

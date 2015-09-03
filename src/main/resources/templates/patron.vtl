@@ -28,6 +28,62 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<div class="well">
-  <h2>$patron.getName()</h2>
+<div >
+  <h2 class="well">$patron.getName()</h2>
 </div>
+
+<br>
+
+<h4>Current books</h4>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Checkout</th>
+      <th>Due Date</th>
+      <th>-</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach($checkout in $patron.getCheckouts())
+      <tr>
+        <td>$checkout.getBookTitle()</td>
+        <td>
+          #foreach ($author in $checkout.getBookAuthors())
+          <option value="$author.getId()">$author.getName()
+          #end
+        </td>
+        <td>$checkout.getCheckoutDate()</td>
+        <td>$checkout.getDueDate()</td>
+        <td><a href="/" class="btn btn-success">Returned</a></td>
+      </tr>
+    #end
+  </tbody>
+</table>
+
+<br>
+<hr/>
+<br>
+
+<h4>History</h4>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Checkout</th>
+      <th>Due Date</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>American Gods</td>
+        <td>Neil Gaiman</td>
+        <td>2014/05/07</td>
+        <td>2050/05/08</td>
+      </tr>
+  </tbody>
+</table>

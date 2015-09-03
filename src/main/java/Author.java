@@ -62,7 +62,7 @@ public class Author {
       String sql = "INSERT INTO authors_books (book_id, author_id) VALUES (:book_id, :author_id)";
       con.createQuery(sql)
         .addParameter("book_id", book_id)
-        .addParameter("author_id", this.getId())
+        .addParameter("author_id", id)
         .executeUpdate();
     }
   }
@@ -78,23 +78,13 @@ public class Author {
   }
 
   // need to fix init error
-  public ArrayList<Book> getUnassignedBooks() {
+  public List<Book> getUnassignedBooks() {
     try(Connection con = DB.sql2o.open()){
-      String sql = "SELECT book_id FROM authors_books WHERE NOT author_id = :author_id";
-      List<Integer> book_ids = con.createQuery(sql)
-        .addParameter("author_id", this.getId())
-        .executeAndFetch(Integer.class);
-
-      ArrayList<Book> books = new ArrayList<Book>();
-
-      for (Integer book_id : book_ids) {
-          String bookQuery = "Select * From books WHERE id = :book_id";
-          Book book = con.createQuery(bookQuery)
-            .addParameter("book_id", book_id)
-            .executeAndFetchFirst(Book.class);
-            books.add(book);
-      }
-      return books;
+      String sql = "SELECT books.* FROM authors JOIN authors_books ON (authors.id=authors_books.author_id) JOIN books ON (authors_books.book_id=books.id) WHERE NOT authors.id =:id";
+      List<Book> books = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetch(Book.class);
+        return books;
     }
   }
 
